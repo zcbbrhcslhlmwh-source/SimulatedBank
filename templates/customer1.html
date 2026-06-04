@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #1f2d3d;
+        }
+
+        .card-container {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            width: 200px;
+        }
+
+        .ai-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+            width: 70%;
+            margin: 30px auto;
+
+            text-align: center;
+        }
+
+        .ai-card h3 {
+            margin-bottom: 15px;
+            color: #2d8cf0;
+        }
+
+        .ai-card p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .income {
+            color: green;
+            font-weight: bold;
+        }
+
+        .expense {
+            color: red;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background: #2d8cf0;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f0f4f8;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>欢迎！客户 {{ input_id }}</h1> 
+    <form action="/customer1/{{ input_id }}" method="post">
+        <input type="hidden" name="action" value="logout">
+        <button type="submit">登出</button>
+    </form>
+
+    <div class="top-bar">
+        <form action="/customer1/{{ input_id }}" method="post">
+            <input type="hidden" name="action" value="search">
+            <label>请选择月份（建议2026-01/02）</label>
+            <input type="month" name="selected_month" value="{{ now_str }}">
+            <button type="submit">加载</button>
+        </form>
+    </div>
+
+    <!-- Summary cards -->
+    <div class="card-container">
+        <div class="card">
+            <h3>本月账单</h3>
+            <p>{{ balance }}</p>
+        </div>
+
+        <div class="card">
+            <h3>收入</h3>
+            <p class="income">{{ income }}</p>
+        </div>
+
+        <div class="card">
+            <h3>支出</h3>
+            <p class="expense">{{ expense }}</p>
+        </div>
+    </div>
+
+    <!-- Type summary -->
+    <h3>支出种类</h3>
+    {% set type_map = {
+        "salary": "工资",
+        "rent": "房租",
+        "shopping": "购物",
+        "transport": "交通",
+        "transfer": "转账"
+    } %}
+    <table>
+        <tr>
+            <th>类型</th>
+            <th>全部</th>
+        </tr>
+        {% for t in type_summary %}
+        <tr>
+            <td>{{ type_map[t.type] }}</td>
+            <td>{{ t.total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="ai-card">
+        <h3>AI 理财建议 🤖</h3>
+        <p>{{ ai_tip }}</p>
+    </div>
+    
+
+    <!-- Recent transactions -->
+    <h3>最近5次记录</h3>
+    <table>
+        <tr>
+            <th>时间</th>
+            <th>类型</th>
+            <th>金额</th>
+        </tr>
+
+        {% for tx in recent %}
+        <tr>
+            <td>{{ tx.time }}</td>
+            <td>{{ type_map[tx.type] }}</td>
+            <td class="{% if tx.amount < 0 %}expense{% else %}income{% endif %}">
+                {{ tx.amount }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>
+

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Login</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-card {
+            background: white;
+            padding: 35px;
+            width: 380px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 22px;
+            color: #1f2d3d;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            background: #2d8cf0;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1a73d9;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #2d8cf0;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+
+        <h1>客户登录页面</h1>
+
+        {% if error1 %}
+        <p class="error">{{ error1 }}</p>
+        {% endif %}
+
+        {% if error2 %}
+        <p class="error">{{ error2 }}</p>
+        {% endif %}
+
+        <form action="/customer0" method="post">
+
+            <label>客户ID</label>
+            <input type="text" name="input_id" placeholder="e.g. 100001">
+
+            <label>密码</label>
+            <input type="password" name="input_password" placeholder="Enter password">
+
+            <button type="submit">登录</button>
+        </form>
+
+        <a class="back-link" href="/">← 回到首页</a>
+
+    </div>
+
+</body>
+</html>
